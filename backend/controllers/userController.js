@@ -87,8 +87,10 @@ export const Login = async (req, res) => {
       .cookie("token", token, { expiresIn: "1d", httpOnly: true })
       .json({
         message: `welcome back ${user.name}`,
+        user,
         success: true,
       });
+    console.log("user data", user);
   } catch (error) {
     console.log(error);
   }

@@ -1,4 +1,5 @@
 import { Tweet } from "../models/tweetSchema.js";
+import { User } from "../models/userSchema.js";
 
 export const createTweet = async (req, res) => {
   try {
@@ -53,5 +54,40 @@ export const likeOrDislike = async (req, res) => {
     return res.status(200).json({
       message: "you like this post",
     });
+  }
+};
+
+export const getAllTweet = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const loggedInUser = await User.findById(id);
+    const loggedInUserTweet = await Tweet.find({ userId: id });
+    const followingUserTweet = await Promise.all(
+      loggedInUser.following.map((otherUserId) => {
+        return Tweet.find({ userId: otherUserId });
+      })
+    );
+    return res.status(200).json({
+      tweets: loggedInUserTweet.concat(...followingUserTweet),
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getFollowingUserTweet = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const loggedInUser = await User.findById(id);
+    const followingUserTwwet = await Promise.all(
+      loggedInUser.followers.map((otherUserId) => {
+        return Tweet.find({ userId: otherUserId });
+      })
+    );
+    return res.status(200).json({
+      tweets: [].concat(...followingUserTwwet),
+    });
+  } catch (error) {
+    console.log(error);
   }
 };

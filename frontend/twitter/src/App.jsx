@@ -1,6 +1,7 @@
 import Home from "./components/Home";
 import { Routes, Route } from "react-router-dom";
 import Profile from "./components/Profile";
+import { Toaster } from "react-hot-toast";
 import Feed from "./components/Feed";
 import Login from "./components/Login";
 
@@ -14,6 +15,7 @@ function App() {
         </Route>
         <Route path="/login" element={<Login />} />
       </Routes>
+      <Toaster position="top-right" reverseOrder={false} />
     </div>
   );
 }
